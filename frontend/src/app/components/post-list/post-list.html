@@ -1,0 +1,27 @@
+<div>
+      <h3>Community Posts</h3>
+      <div class="btn-group" style="margin-bottom:15px;">
+        <button class="btn btn-default" *ngFor="let tag of allowedTags" (click)="filterByTag(tag)">
+          {{ tag }}
+        </button>
+        <button class="btn btn-default" (click)="filterByTag('')">All</button>
+      </div>
+
+      <app-skeleton-loader *ngIf="loading"></app-skeleton-loader>
+
+      <div *ngFor="let post of posts" class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a [routerLink]="['/posts', post._id]">{{ post.title }}</a>
+          </h4>
+        </div>
+        <div class="panel-body">
+          <p>{{ post.content }}</p>
+          <small>
+            Tags: <span *ngFor="let tag of post.tags">{{ tag }} </span>
+          </small>
+          <br>
+          <span>Supports: {{ post.supportCount }}</span>
+        </div>
+      </div>
+    </div>
