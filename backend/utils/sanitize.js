@@ -1,23 +1,7 @@
-const sanitizeString = (value) => {
-  if (typeof value !== 'string') return value;
-
-  return value
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-    .trim();
-};
-
-const sanitizeObject = (obj) => {
+exports.sanitizeObject = (obj) => {
   const sanitized = {};
-  for (const key in obj) {
-    sanitized[key] =
-      typeof obj[key] === 'string'
-        ? sanitizeString(obj[key])
-        : obj[key];
-  }
+  if (obj.title) sanitized.title = String(obj.title).trim();
+  if (obj.content) sanitized.content = String(obj.content).trim();
+  if (Array.isArray(obj.tags)) sanitized.tags = obj.tags.map(String).filter(tag => tag); // remove null/undefined
   return sanitized;
 };
-
-module.exports = { sanitizeString, sanitizeObject };

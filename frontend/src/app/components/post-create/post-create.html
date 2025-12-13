@@ -1,0 +1,26 @@
+<form [formGroup]="postForm" (ngSubmit)="submit()" class="well">
+  <div class="form-group">
+    <label>Title</label>
+    <input type="text" formControlName="title" class="form-control" placeholder="Post title">
+  </div>
+
+  <div class="form-group">
+    <label>Content</label>
+    <textarea formControlName="content" class="form-control" rows="5" placeholder="Your message"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Tags</label>
+    <div *ngFor="let tag of allowedTags">
+      <label class="checkbox-inline">
+        <input type="checkbox" (change)="toggleTag(tag, $event)"> {{ tag }}
+      </label>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="postForm.invalid">Create Post</button>
+</form>
+
+<div *ngIf="successToken" class="alert alert-success" style="margin-top:10px;">
+  Post created! Save your anonymous token: <strong>{{ successToken }}</strong>
+</div>

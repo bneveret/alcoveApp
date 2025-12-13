@@ -19,48 +19,7 @@ interface Post {
   selector: 'app-post-detail',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
-  template: `
-    <div *ngIf="loading" class="text-center">Loading post...</div>
-
-    <div *ngIf="!loading && post" class="panel panel-default">
-      <div class="panel-heading">
-        <h3>{{ post.title }}</h3>
-      </div>
-      <div class="panel-body">
-        <p>{{ post.content }}</p>
-        <p>Tags: <span *ngFor="let tag of post.tags">{{ tag }} </span></p>
-        <p>Supports: {{ post.supportCount }}</p>
-
-        <button class="btn btn-success" (click)="supportPost()" [disabled]="supported">
-          {{ supported ? 'Supported' : 'Support' }}
-        </button>
-
-        <hr>
-
-        <h4>Edit / Delete Post</h4>
-        <form [formGroup]="editForm" (ngSubmit)="updatePost()">
-          <div class="form-group">
-            <label for="editTitle">Title</label>
-            <input id="editTitle" type="text" class="form-control" formControlName="title">
-          </div>
-          <div class="form-group">
-            <label for="editContent">Content</label>
-            <textarea id="editContent" class="form-control" rows="5" formControlName="content"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Anonymous Token</label>
-            <input type="text" class="form-control" formControlName="token" placeholder="Enter your anonymous token">
-          </div>
-          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Update</button>
-          <button type="button" class="btn btn-danger" (click)="deletePost()">Delete</button>
-        </form>
-
-        <div *ngIf="message" class="alert alert-info" style="margin-top:15px;">
-          {{ message }}
-        </div>
-      </div>
-    </div>
-  `
+  templateUrl: './post-detail.html'
 })
 export class PostDetailComponent implements OnInit {
   post: Post | null = null;

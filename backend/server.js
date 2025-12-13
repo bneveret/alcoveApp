@@ -1,22 +1,18 @@
 require('dotenv').config();
+require('./config/mongoose');
 const express = require('express');
-const connectDB = require('./config/mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
-// Core middleware
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false }));
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-// Placeholder for routes (Phase 2)
+// Import routes
 const postsRoutes = require('./routes/posts.routes');
 const moodRoutes = require('./routes/mood.routes');
 const supportRoutes = require('./routes/support.routes');

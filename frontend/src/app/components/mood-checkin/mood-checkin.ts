@@ -12,45 +12,7 @@ interface MoodStat {
   selector: 'app-mood-checkin',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3>Mood Check-in</h3>
-      </div>
-      <div class="panel-body">
-        <p>How are you feeling right now?</p>
-        <div class="btn-group">
-          <button *ngFor="let mood of allowedMoods"
-                  class="btn btn-default btn-lg"
-                  (click)="submitMood(mood)">
-            {{ mood }}
-          </button>
-        </div>
-
-        <div *ngIf="message" class="alert alert-info" style="margin-top:15px;">
-          {{ message }}
-        </div>
-
-        <hr>
-
-        <div>
-          <h4>Mood Statistics (last {{ range }} days)</h4>
-          <div *ngIf="stats.length === 0">No data yet.</div>
-          <ul class="list-unstyled">
-            <li *ngFor="let stat of stats">
-              {{ stat._id }}: {{ stat.count }}
-            </li>
-          </ul>
-
-          <label>Show stats for last
-            <input type="number" [(ngModel)]="range" min="1" max="30" style="width:60px;">
-            days
-          </label>
-          <button class="btn btn-default btn-sm" (click)="loadStats()">Refresh</button>
-        </div>
-      </div>
-    </div>
-  `
+  templateUrl: './mood-checkin.html'
 })
 export class MoodCheckinComponent implements OnInit {
   allowedMoods = ['😊','😐','😔','😟','😌'];

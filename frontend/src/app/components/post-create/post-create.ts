@@ -7,50 +7,7 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-post-create',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3>Create a New Post</h3>
-      </div>
-      <div class="panel-body">
-        <form [formGroup]="postForm" (ngSubmit)="submit()">
-          <div class="form-group">
-            <label for="title">Title</label>
-            <input id="title" type="text" class="form-control" formControlName="title">
-            <div *ngIf="postForm.controls['title'].invalid && postForm.controls['title'].touched" class="text-danger">
-              Title is required (3-100 characters)
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="content">Content</label>
-            <textarea id="content" class="form-control" rows="5" formControlName="content"></textarea>
-            <div *ngIf="postForm.controls['content'].invalid && postForm.controls['content'].touched" class="text-danger">
-              Content is required (10-2000 characters)
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Tags</label>
-            <div class="checkbox" *ngFor="let tag of allowedTags">
-              <label>
-                <input type="checkbox" [value]="tag" (change)="toggleTag(tag, $event)"> {{ tag }}
-              </label>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary" [disabled]="postForm.invalid">Post</button>
-        </form>
-
-        <div *ngIf="successToken" class="alert alert-success" style="margin-top:15px;">
-          Post created successfully! Your anonymous token is:
-          <strong>{{ successToken }}</strong>
-          <br>
-          Keep it safe to edit/delete your post later.
-        </div>
-      </div>
-    </div>
-  `
+  templateUrl: './post-create.html',
 })
 export class PostCreateComponent {
   postForm: FormGroup;
@@ -69,7 +26,7 @@ export class PostCreateComponent {
 
   toggleTag(tag: string, event: any) {
     if (event.target.checked) {
-      this.selectedTags.push(tag);
+      if (!this.selectedTags.includes(tag)) this.selectedTags.push(tag);
     } else {
       this.selectedTags = this.selectedTags.filter(t => t !== tag);
     }
@@ -77,9 +34,19 @@ export class PostCreateComponent {
   }
 
   submit() {
-    if (this.postForm.invalid) return;
+    if (this.postForm.invalid) {
+      alert('Please fill all fields correctly');
+      return;
+    }
 
-    this.http.post<{id: string, anonymousToken: string}>('/api/posts', this.postForm.value).subscribe({
+    const payload = {
+      title: this.postForm.value.title?.trim(),
+      content: this.postForm.value.content?.trim(),
+      tags: this.postForm.value.tags || []
+    };
+
+    this.http.post<{id: string, anonymousToken: string}>('/api/posts', payload)
+    .subscribe({
       next: (res) => {
         this.successToken = res.anonymousToken;
         this.postForm.reset();
