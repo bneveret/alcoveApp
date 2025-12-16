@@ -4,7 +4,7 @@ import { MoodService } from '../../services/mood.service';
 import { FormsModule } from '@angular/forms';
 
 interface MoodStat {
-  _id: string; // emoji
+  _id: string;
   count: number;
 }
 

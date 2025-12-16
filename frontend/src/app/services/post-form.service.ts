@@ -1,4 +1,3 @@
-// src/app/services/post-form.service.ts
 import { Injectable } from '@angular/core';
 
 export interface PostFormData {
