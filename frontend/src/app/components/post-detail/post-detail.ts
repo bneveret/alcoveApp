@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../../services/posts.service';
-import { SupportService } from '../../services/support.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,7 +9,6 @@ interface Post {
   _id: string;
   title: string;
   content: string;
-  tags: string[];
   supportCount: number;
   createdAt: string;
 }
@@ -30,7 +28,6 @@ export class PostDetailComponent implements OnInit {
 
   constructor(
     private postsService: PostsService,
-    private supportService: SupportService,
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient
@@ -78,14 +75,6 @@ export class PostDetailComponent implements OnInit {
   this.postsService.deletePost(this.post._id, token).subscribe({
     next: () => { this.message = 'Post deleted'; setTimeout(() => this.router.navigate(['/posts']), 1000); },
     error: err => { this.message = 'Delete failed: ' + (err.error?.error || err.message); }
-  });
-}
-
-  supportPost() {
-  if (!this.post) return;
-  this.supportService.supportPost(this.post._id).subscribe({
-    next: res => { this.post!.supportCount = res.supportCount; this.supported = true; },
-    error: () => { this.message = 'You have already supported this post'; this.supported = true; }
   });
 }
 }

@@ -13,8 +13,6 @@ import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader';
 export class PostListComponent implements OnInit {
   posts: Post[] = [];
   loading = true;
-  allowedTags = ['anxiety','depression','burnout','stress','loneliness','grief','self-esteem','other'];
-  currentTag = '';
 
   constructor(private postsService: PostsService) {}
 
@@ -24,14 +22,9 @@ export class PostListComponent implements OnInit {
 
   fetchPosts() {
     this.loading = true;
-    this.postsService.getPosts(this.currentTag).subscribe({
+    this.postsService.getPosts().subscribe({
       next: (res) => { this.posts = res; this.loading = false; },
       error: () => { this.posts = []; this.loading = false; }
     });
-  }
-
-  filterByTag(tag: string) {
-    this.currentTag = tag;
-    this.fetchPosts();
   }
 }

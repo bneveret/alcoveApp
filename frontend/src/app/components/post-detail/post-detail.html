@@ -6,12 +6,6 @@
       </div>
       <div class="panel-body">
         <p>{{ post.content }}</p>
-        <p>Tags: <span *ngFor="let tag of post.tags">{{ tag }} </span></p>
-        <p>Supports: {{ post.supportCount }}</p>
-
-        <button class="btn btn-success" (click)="supportPost()" [disabled]="supported">
-          {{ supported ? 'Supported' : 'Support' }}
-        </button>
 
         <hr>
 

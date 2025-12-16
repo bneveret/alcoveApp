@@ -6,8 +6,6 @@ export interface Post {
   _id: string;
   title: string;
   content: string;
-  tags: string[];
-  supportCount: number;
   createdAt: string;
 }
 
@@ -19,24 +17,31 @@ export class PostsService {
 
   constructor(private http: HttpClient) {}
 
-  getPosts(tag?: string): Observable<Post[]> {
-    const url = tag ? `${this.baseUrl}?tag=${tag}` : this.baseUrl;
-    return this.http.get<Post[]>(url);
+  getPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>(this.baseUrl);
   }
 
   getPost(id: string): Observable<Post> {
     return this.http.get<Post>(`${this.baseUrl}/${id}`);
   }
 
-  createPost(data: { title: string; content: string; tags: string[] }) {
-    return this.http.post<{ id: string; anonymousToken: string }>(this.baseUrl, data);
+  createPost(data: { title: string; content: string }) {
+    return this.http.post<{ id: string; anonymousToken: string }>(
+      this.baseUrl,
+      data
+    );
   }
 
-  updatePost(id: string, data: { title: string; content: string; tags?: string[]; token: string }) {
+  updatePost(
+    id: string,
+    data: { title?: string; content?: string; token: string }
+  ) {
     return this.http.put(`${this.baseUrl}/${id}`, data);
   }
 
   deletePost(id: string, token: string) {
-    return this.http.request('delete', `${this.baseUrl}/${id}`, { body: { token } });
+    return this.http.request('delete', `${this.baseUrl}/${id}`, {
+      body: { token }
+    });
   }
 }

@@ -1,15 +1,14 @@
 const Post = require('../models/post.model');
-const { sanitizeObject } = require('../utils/sanitize');
 
 exports.createPost = async (req, res) => {
   try {
-    const data = sanitizeObject(req.body);
+    const { title, content } = req.body;
 
-    const post = await Post.create({
-      title: data.title,
-      content: data.content,
-      tags: data.tags
-    });
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Title and content are required' });
+    }
+
+    const post = await Post.create({ title, content });
 
     res.status(201).json({
       id: post._id,
@@ -20,14 +19,9 @@ exports.createPost = async (req, res) => {
   }
 };
 
-exports.getPosts = async (req, res) => {
+exports.getPosts = async (_req, res) => {
   try {
-    const filter = {};
-    if (req.query.tag) {
-      filter.tags = req.query.tag;
-    }
-
-    const posts = await Post.find(filter)
+    const posts = await Post.find()
       .sort({ createdAt: -1 })
       .select('-anonymousToken');
 
@@ -55,8 +49,7 @@ exports.getPostById = async (req, res) => {
 
 exports.updatePost = async (req, res) => {
   try {
-    const { token } = req.body;
-    const data = sanitizeObject(req.body);
+    const { token, title, content } = req.body;
 
     const post = await Post.findOne({
       _id: req.params.id,
@@ -67,9 +60,8 @@ exports.updatePost = async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
-    post.title = data.title ?? post.title;
-    post.content = data.content ?? post.content;
-    post.tags = data.tags ?? post.tags;
+    if (title) post.title = title;
+    if (content) post.content = content;
 
     await post.save();
     res.json({ message: 'Post updated' });

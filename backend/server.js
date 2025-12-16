@@ -15,11 +15,9 @@ app.use(express.urlencoded({ extended: false }));
 // Import routes
 const postsRoutes = require('./routes/posts.routes');
 const moodRoutes = require('./routes/mood.routes');
-const supportRoutes = require('./routes/support.routes');
 
 app.use('/api/posts', postsRoutes);
 app.use('/api/mood', moodRoutes);
-app.use('/api/support', supportRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

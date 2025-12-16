@@ -4,14 +4,13 @@ import { Injectable } from '@angular/core';
 export interface PostFormData {
   title: string;
   content: string;
-  tags: string[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostFormService {
-  private data: PostFormData = { title: '', content: '', tags: [] };
+  private data: PostFormData = { title: '', content: ''};
 
   getFormData(): PostFormData {
     return this.data;
@@ -22,6 +21,6 @@ export class PostFormService {
   }
 
   clearFormData() {
-    this.data = { title: '', content: '', tags: [] };
+    this.data = { title: '', content: '' };
   }
 }
